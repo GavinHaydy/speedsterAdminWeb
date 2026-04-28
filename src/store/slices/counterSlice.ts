@@ -1,17 +1,18 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { Dispatch } from '@reduxjs/toolkit';
 
 interface CounterState {
   value: number;
-  status: "idle" | "loading" | "failed";
+  status: 'idle' | 'loading' | 'failed';
 }
 
 const initialState: CounterState = {
   value: 0,
-  status: "idle",
+  status: 'idle',
 };
 
 export const counterSlice = createSlice({
-  name: "counter",
+  name: 'counter',
   initialState,
   reducers: {
     increment: (state) => {
@@ -28,32 +29,24 @@ export const counterSlice = createSlice({
     },
     reset: (state) => {
       state.value = 0;
-      state.status = "idle";
+      state.status = 'idle';
     },
-    setStatus: (state, action: PayloadAction<CounterState["status"]>) => {
+    setStatus: (state, action: PayloadAction<CounterState['status']>) => {
       state.status = action.payload;
     },
   },
 });
 
 // 导出 actions
-export const {
-  increment,
-  decrement,
-  incrementByAmount,
-  decrementByAmount,
-  reset,
-  setStatus,
-} = counterSlice.actions;
+export const { increment, decrement, incrementByAmount, decrementByAmount, reset, setStatus } =
+  counterSlice.actions;
 
 // 导出 selectors
-export const selectCount = (state: { counter: CounterState }) =>
-  state.counter.value;
-export const selectStatus = (state: { counter: CounterState }) =>
-  state.counter.status;
+export const selectCount = (state: { counter: CounterState }) => state.counter.value;
+export const selectStatus = (state: { counter: CounterState }) => state.counter.status;
 
 // 异步 action 示例
-export const incrementAsync = (amount: number) => (dispatch: any) => {
+export const incrementAsync = (amount: number) => (dispatch: Dispatch) => {
   setTimeout(() => {
     dispatch(incrementByAmount(amount));
   }, 1000);

@@ -1,50 +1,26 @@
+/* eslint-disable react-refresh/only-export-components */
 // src/router/index.tsx
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import { lazy, Suspense } from "react";
-import { Spin } from "antd";
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 // import MainLayout from '../layouts/MainLayout';
-
-// 懒加载页面组件
-const Login = lazy(() => import("../pages/Login"));
+// import { LoginRoute } from './LoginRoute';
+import { lazy, Suspense } from 'react';
+import { Loading } from '../components';
+// 懒加载页面（示例，启用时请在对应 *Route 组件里接入）:
 // const Dashboard = lazy(() => import('../pages/Dashboard'));
 // const UserManagement = lazy(() => import('../pages/UserManagement'));
 // const NotFound = lazy(() => import('../pages/NotFound'));
-
-// 加载中组件
-const LoadingFallback = () => (
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh",
-    }}
-  >
-    <Spin size="large" />
-  </div>
-);
-
-// 路由守卫组件
-const RouteGuard = ({ children }: { children: React.ReactNode }) => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <>{children}</>;
-};
+const Login = lazy(() => import('../pages/Login'));
 
 // 路由配置
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Navigate to="/login" replace />,
   },
   {
-    path: "/login",
+    path: '/login',
     element: (
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<Loading />}>
         <Login />
       </Suspense>
     ),
@@ -64,7 +40,7 @@ export const router = createBrowserRouter([
   //     {
   //       path: 'dashboard',
   //       element: (
-  //         <Suspense fallback={<LoadingFallback />}>
+  //         <Suspense fallback={<Loading />}>
   //           <Dashboard />
   //         </Suspense>
   //       ),
@@ -72,7 +48,7 @@ export const router = createBrowserRouter([
   //     {
   //       path: 'users',
   //       element: (
-  //         <Suspense fallback={<LoadingFallback />}>
+  //         <Suspense fallback={<Loading />}>
   //           <UserManagement />
   //         </Suspense>
   //       ),
@@ -80,7 +56,7 @@ export const router = createBrowserRouter([
   //     {
   //       path: '*',
   //       element: (
-  //         <Suspense fallback={<LoadingFallback />}>
+  //         <Suspense fallback={<Loading />}>
   //           <NotFound />
   //         </Suspense>
   //       ),

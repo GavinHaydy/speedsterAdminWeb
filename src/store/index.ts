@@ -1,4 +1,4 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 // 临时占位 reducer
 const counterReducer = (state = { value: 0 }) => state;
@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
 
 export const store = configureStore({
   reducer: rootReducer,
-  devTools: import.meta.env.NODE_ENV !== "production",
+  devTools: import.meta.env.NODE_ENV !== 'production',
 });
 
 export type RootState = ReturnType<typeof store.getState>;
