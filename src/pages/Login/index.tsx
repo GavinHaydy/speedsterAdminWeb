@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { DashboardOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
@@ -6,6 +7,7 @@ import { Button, Card, Form, Input, message } from 'antd';
 import type { ILoginParams } from '@/api/user';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { login, selectUserLoading } from '@/store/slices/userSlice';
+import { initWasm } from '@/utils/wasm.ts';
 
 import './index.css';
 
@@ -14,8 +16,16 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectUserLoading);
 
+  useEffect(() => {
+    async function load() {
+      await initWasm();
+    }
+    load().then();
+  });
+
   const onFinish = async (values: ILoginParams) => {
     try {
+      values.password = window.encryptAES(values.password);
       await dispatch(login(values)).unwrap();
       message.success('登录成功');
       navigate('/dashboard', { replace: true });
