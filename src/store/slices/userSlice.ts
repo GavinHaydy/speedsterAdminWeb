@@ -1,7 +1,6 @@
-import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { accountLogin } from '@/api/generated/user';
-import type { AccountLoginParams } from '@/types/generated/user';
+import type { AccountLoginResult } from '@/types/generated/user';
 import { applyTokenPair, clearAuth, getToken, setToken as saveToken } from '@/utils/auth';
 
 interface User {
@@ -27,18 +26,25 @@ const initialState: UserState = {
   error: null,
 };
 
-// 异步登录
-export const login = createAsyncThunk('user/login', async (credentials: AccountLoginParams) => {
-  const result = await accountLogin(credentials);
-  return result;
-});
-
-// 异步获取用户信息
-
+// 登录成功后写入 token
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
+    login: (state, action: PayloadAction<AccountLoginResult>) => {
+      state.loading = false;
+      state.error = null;
+      state.token = action.payload.accessToken;
+      state.isAuthenticated = true;
+      applyTokenPair(action.payload);
+    },
+    setLoginError: (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
       state.isAuthenticated = true;
@@ -58,27 +64,10 @@ export const userSlice = createSlice({
       state.error = null;
     },
   },
-  extraReducers: (builder) => {
-    builder
-      // 登录
-      .addCase(login.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
-        state.token = action.payload.accessToken;
-        state.isAuthenticated = true;
-        applyTokenPair(action.payload);
-      })
-      .addCase(login.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || '登录失败';
-      });
-  },
 });
 
-export const { setUser, setToken, logout, clearError } = userSlice.actions;
+export const { setLoading, login, setLoginError, setUser, setToken, logout, clearError } =
+  userSlice.actions;
 
 // Selectors
 export const selectUser = (state: { user: UserState }) => state.user.user;
