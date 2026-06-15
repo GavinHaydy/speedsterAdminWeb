@@ -6,7 +6,7 @@ import { Button, Card, Form, Input, message } from 'antd';
 
 import { accountLogin } from '@/api/generated/user';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { login, selectUserLoading } from '@/store/slices/userSlice';
+import { login, selectUserLoading, setLoading, setLoginError } from '@/store/slices/userSlice';
 import type { AccountLoginParams } from '@/types/generated/user';
 import { initWasm } from '@/utils/wasm.ts';
 
@@ -25,12 +25,18 @@ export default function Login() {
   });
 
   const onFinish = async (values: AccountLoginParams) => {
+    dispatch(setLoading(true));
     try {
-      const result = await accountLogin(values);
+      const result = await accountLogin({
+        ...values,
+        password: window.encryptAES(values.password),
+      });
       dispatch(login(result));
       navigate('/dashboard', { replace: true });
     } catch (error) {
-      message.error(error.message);
+      const errorMessage = error instanceof Error ? error.message : '登录失败';
+      dispatch(setLoginError(errorMessage));
+      message.error(errorMessage);
     }
   };
 
