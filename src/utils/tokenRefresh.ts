@@ -1,7 +1,8 @@
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
-import { fetchRefreshToken } from '../api/user';
-import type { ApiResponse } from '../types/api';
+import { refresh } from '@/api/generated/user';
+import type { ApiResponse } from '@/types/api';
+
 import { applyTokenPair, clearAuth, getRefreshToken } from './auth';
 
 let isRefreshing = false;
@@ -28,7 +29,7 @@ export const refreshAccessToken = async (): Promise<string> => {
     throw new Error('无 refresh token');
   }
 
-  const data = await fetchRefreshToken(refreshToken);
+  const data = await refresh({ refreshToken });
   applyTokenPair(data);
   return data.accessToken;
 };

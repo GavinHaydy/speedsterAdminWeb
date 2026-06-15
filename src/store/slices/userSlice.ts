@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { fetchLogin, type ILoginParams } from '@/api/user';
+import { accountLogin } from '@/api/generated/user';
+import type { AccountLoginParams } from '@/types/generated/user';
 import { applyTokenPair, clearAuth, getToken, setToken as saveToken } from '@/utils/auth';
 
 interface User {
@@ -27,8 +28,9 @@ const initialState: UserState = {
 };
 
 // 异步登录
-export const login = createAsyncThunk('user/login', async (credentials: ILoginParams) => {
-  return fetchLogin(credentials);
+export const login = createAsyncThunk('user/login', async (credentials: AccountLoginParams) => {
+  const result = await accountLogin(credentials);
+  return result;
 });
 
 // 异步获取用户信息
