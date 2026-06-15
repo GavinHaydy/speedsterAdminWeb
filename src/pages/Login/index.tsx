@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { DashboardOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Input, message } from 'antd';
 
-import type { ILoginParams } from '@/api/user';
+import { accountLogin } from '@/api/generated/user';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { login, selectUserLoading } from '@/store/slices/userSlice';
+import type { AccountLoginParams } from '@/types/generated/user';
 import { initWasm } from '@/utils/wasm.ts';
 
 import './index.css';
@@ -23,14 +24,13 @@ export default function Login() {
     load().then();
   });
 
-  const onFinish = async (values: ILoginParams) => {
+  const onFinish = async (values: AccountLoginParams) => {
     try {
-      values.password = window.encryptAES(values.password);
-      await dispatch(login(values)).unwrap();
-      message.success('登录成功');
+      const result = await accountLogin(values);
+      dispatch(login(result));
       navigate('/dashboard', { replace: true });
-    } catch {
-      // 错误提示由 request 拦截器统一处理
+    } catch (error) {
+      message.error(error.message);
     }
   };
 
