@@ -2,8 +2,10 @@
 
 if command -v pnpm >/dev/null 2>&1; then
   pnpm lint-staged
+  pnpm exec tsc -b
 elif command -v bun >/dev/null 2>&1; then
   bun lint-staged
+  bun run tsc -b
 else
   echo "Neither pnpm nor bun found"
   exit 1
