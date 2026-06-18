@@ -373,8 +373,7 @@ const generateApiFile = (operations, sourceName) => {
   return `// 由 scripts/generate-api.mjs 自动生成，请勿手动修改
 // 来源: ${sourceName}
 
-import request from '@/utils/request';
-${typeImportLine}
+${typeImportLine}import request from '@/utils/request';\n\n
 ${functions.join('\n\n')}
 `;
 };
@@ -393,6 +392,9 @@ const main = async () => {
   console.log('开始生成 API 代码...\n');
 
   const sources = await resolveSources();
+  sources.sort((a, b) => a.name.localeCompare(b.name));
+
+  console.log(sources);
   console.log('');
 
   /** @type {string[]} */

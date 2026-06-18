@@ -49,7 +49,7 @@ http.interceptors.request.use(
     if (!config._skipAuth) {
       const token = getToken();
       if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `${token}`;
       }
     }
 
