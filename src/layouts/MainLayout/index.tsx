@@ -40,6 +40,12 @@ const menuItems: MenuProps['items'] = [
     label: '订单管理',
     disabled: true,
   },
+  {
+    key: '/permission',
+    icon: '',
+    label: '权限管理',
+    disabled: false,
+  },
 ];
 
 export default function MainLayout() {

@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "code:fix": "pnpm run lint:fix && pnpm run format",
     "gen:api": "node scripts/generate-api.mjs",
+    "api": "bun scripts/generate-api.mjs",
     "prepare": "husky"
   },
   "lint-staged": {
