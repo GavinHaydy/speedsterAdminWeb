@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { DashboardOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Input, message } from 'antd';
 
-import { accountLogin } from '@/api/generated/user';
+import { accountLogin } from '@/api/generated/iam';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { login, selectUserLoading, setLoading, setLoginError } from '@/store/slices/userSlice';
 import type { AccountLoginParams } from '@/types/generated/user';

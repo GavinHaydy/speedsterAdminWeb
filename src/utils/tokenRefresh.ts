@@ -1,6 +1,6 @@
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
-import { refresh } from '@/api/generated/user';
+import { refresh } from '@/api/generated/iam';
 import type { ApiResponse } from '@/types/api';
 
 import { applyTokenPair, clearAuth, getRefreshToken } from './auth';
