@@ -11,6 +11,14 @@ export const setToken = (token: string): void => {
   localStorage.setItem(TOKEN_KEY, token);
 };
 
+export const getIsAdmin = (): boolean => {
+  return localStorage.getItem('isAdmin') === 'true';
+};
+
+export const setIsAdmin = (isAdmin: boolean): void => {
+  localStorage.setItem('isAdmin', String(isAdmin));
+};
+
 export const getRefreshToken = (): string | null => {
   return localStorage.getItem(REFRESH_TOKEN_KEY);
 };

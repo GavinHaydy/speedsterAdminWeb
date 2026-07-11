@@ -8,7 +8,7 @@ export default {
     apiDir: 'src/api/generated',
   },
   apiPrefix: '/api',
-  fieldCase: 'camel',
+  fieldCase: 'preserve',
   skipAuthHeuristics: true,
   /** 额外免鉴权路径，作为自动检测之外的补充 */
   skipAuthPaths: [],

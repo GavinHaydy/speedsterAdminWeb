@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import type { AccountLoginResult } from '@/types/generated/user';
+import type { UserPermissionResult } from '@/types/generated';
+import type { AccountLoginResult } from '@/types/generated/iam';
 import { applyTokenPair, clearAuth, getToken, setToken as saveToken } from '@/utils/auth';
 
 interface User {
@@ -14,14 +15,16 @@ interface UserState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  isAdmin: boolean;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: UserState = {
   user: null,
-  token: getToken(),
+  token: null,
   isAuthenticated: !!getToken(),
+  isAdmin: false,
   loading: false,
   error: null,
 };
@@ -45,6 +48,9 @@ export const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    setIsAdmin: (state, action: PayloadAction<UserPermissionResult>) => {
+      state.isAdmin = action.payload.is_admin;
+    },
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
       state.isAuthenticated = true;
@@ -66,13 +72,19 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setLoading, login, setLoginError, setUser, setToken, logout, clearError } =
-  userSlice.actions;
+export const {
+  setLoading,
+  login,
+  setIsAdmin,
+  setUser,
+  setToken,
+  setLoginError,
+  logout,
+  clearError,
+} = userSlice.actions;
 
 // Selectors
-export const selectUser = (state: { user: UserState }) => state.user.user;
 export const selectIsAuthenticated = (state: { user: UserState }) => state.user.isAuthenticated;
 export const selectUserLoading = (state: { user: UserState }) => state.user.loading;
-export const selectUserError = (state: { user: UserState }) => state.user.error;
 
 export default userSlice.reducer;
