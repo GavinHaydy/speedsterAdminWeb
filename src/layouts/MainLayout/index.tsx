@@ -26,7 +26,6 @@ const menuItems: MenuProps['items'] = [
     key: '/users',
     icon: <UserOutlined />,
     label: '用户管理',
-    disabled: true,
   },
   {
     key: '/merchants',

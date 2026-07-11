@@ -9,7 +9,7 @@ import { Permission } from '@/pages/Permission';
 const Login = lazy(() => import('@/pages/Login'));
 const MainLayout = lazy(() => import('@/layouts/MainLayout'));
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
-
+const UserManagement = lazy(() => import('@/pages/UserManagement'));
 export const router = createBrowserRouter([
   {
     path: '/login',
@@ -40,6 +40,14 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loading />}>
             <Dashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'users',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <UserManagement />
           </Suspense>
         ),
       },
