@@ -6,7 +6,7 @@ export interface GetRolePermissionsParams {
 }
 
 export interface GetRolePermissionsResult {
-  permissionIds: number[];
+  permission_ids: number[];
 }
 
 export interface PermissionListParams {
@@ -20,7 +20,7 @@ export interface PermissionListResultItemItemItem {
   id: number;
   method: string;
   name: string;
-  parentId: number;
+  parent_id: number;
   path: string;
   sort: number;
   status: number;
@@ -34,7 +34,7 @@ export interface PermissionListResultItemItem {
   id: number;
   method: string;
   name: string;
-  parentId: number;
+  parent_id: number;
   path: string;
   sort: number;
   status: number;
@@ -48,7 +48,7 @@ export interface PermissionListResultItem {
   id: number;
   method: string;
   name: string;
-  parentId: number;
+  parent_id: number;
   path: string;
   sort: number;
   status: number;
@@ -56,8 +56,8 @@ export interface PermissionListResultItem {
 }
 
 export interface PermissionListResult {
+  is_admin: boolean;
   list: PermissionListResultItem[];
-  total: number;
 }
 
 export interface CreateRoleParams {
@@ -80,11 +80,11 @@ export interface RoleListParams {
 
 export interface RoleListResult {
   code: string;
-  createTime: string;
+  create_time: string;
   desctiption: string;
   name: string;
   status: number;
-  updateTime: string;
+  update_time: string;
 }
 
 export interface UpdateRoleParams {
@@ -124,7 +124,7 @@ export interface RegisterParams {
 }
 
 export interface RegisterResult {
-  userId: string;
+  user_id: string;
 }
 
 export interface StatusParams {
@@ -163,7 +163,7 @@ export interface UserPermissionResultItemItemItem {
   id: number;
   method: string;
   name: string;
-  parentId: number;
+  parent_id: number;
   path: string;
   sort: number;
   status: number;
@@ -177,7 +177,7 @@ export interface UserPermissionResultItemItem {
   id: number;
   method: string;
   name: string;
-  parentId: number;
+  parent_id: number;
   path: string;
   sort: number;
   status: number;
@@ -191,7 +191,7 @@ export interface UserPermissionResultItem {
   id: number;
   method: string;
   name: string;
-  parentId: number;
+  parent_id: number;
   path: string;
   sort: number;
   status: number;
@@ -199,6 +199,6 @@ export interface UserPermissionResultItem {
 }
 
 export interface UserPermissionResult {
+  is_admin: boolean;
   list: UserPermissionResultItem[];
-  total: number;
 }
