@@ -6,7 +6,10 @@ import { permissionList } from '@/api/generated';
 import type { PermissionListResult } from '@/types/generated';
 
 export const Permission = () => {
-  const [permissions, setPermissions] = useState<PermissionListResult>({ total: 0, list: [] });
+  const [permissions, setPermissions] = useState<PermissionListResult>({
+    is_admin: false,
+    list: [],
+  });
 
   useEffect(() => {
     const fetchData = async () => {

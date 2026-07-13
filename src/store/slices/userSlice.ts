@@ -1,19 +1,19 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
+import type { RootState } from '@/store';
 import type { UserPermissionResult } from '@/types/generated';
 import type { AccountLoginResult } from '@/types/generated/iam';
-import { applyTokenPair, clearAuth, getToken, setToken as saveToken } from '@/utils/auth';
+import { getToken } from '@/utils/auth';
 
 interface User {
   id: number;
-  username: string;
-  email: string;
-  avatar?: string;
+  nickname: string;
 }
 
 interface UserState {
   user: User | null;
-  token: string | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
   loading: boolean;
@@ -22,7 +22,8 @@ interface UserState {
 
 const initialState: UserState = {
   user: null,
-  token: null,
+  accessToken: null,
+  refreshToken: null,
   isAuthenticated: !!getToken(),
   isAdmin: false,
   loading: false,
@@ -40,9 +41,9 @@ export const userSlice = createSlice({
     login: (state, action: PayloadAction<AccountLoginResult>) => {
       state.loading = false;
       state.error = null;
-      state.token = action.payload.accessToken;
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
       state.isAuthenticated = true;
-      applyTokenPair(action.payload);
     },
     setLoginError: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -55,16 +56,17 @@ export const userSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = true;
     },
-    setToken: (state, action: PayloadAction<string>) => {
-      state.token = action.payload;
-      saveToken(action.payload);
+    setToken: (state, action: PayloadAction<AccountLoginResult>) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
       state.isAuthenticated = true;
     },
     logout: (state) => {
       state.user = null;
-      state.token = null;
+      state.accessToken = null;
+      state.refreshToken = null;
       state.isAuthenticated = false;
-      clearAuth();
+      state.isAdmin = false;
     },
     clearError: (state) => {
       state.error = null;
@@ -84,7 +86,12 @@ export const {
 } = userSlice.actions;
 
 // Selectors
-export const selectIsAuthenticated = (state: { user: UserState }) => state.user.isAuthenticated;
-export const selectUserLoading = (state: { user: UserState }) => state.user.loading;
+export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectAccessToken = (state: RootState) => state.auth.accessToken;
+export const selectRefreshToken = (state: RootState) => state.auth.refreshToken;
+export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
+export const selectIsAdmin = (state: RootState) => state.auth.isAdmin;
+export const selectUserLoading = (state: RootState) => state.auth.loading;
+export const selectLoginError = (state: RootState) => state.auth.error;
 
 export default userSlice.reducer;
