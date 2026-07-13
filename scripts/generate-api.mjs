@@ -55,7 +55,9 @@ const swaggerTypeToTs = (schema) => {
 
   if (schema.enum?.length) {
     const isNumberEnum = schema.type === 'integer' || schema.type === 'number';
-    return schema.enum.map((item) => (isNumberEnum ? Number(item) : JSON.stringify(item))).join(' | ');
+    return schema.enum
+      .map((item) => (isNumberEnum ? Number(item) : JSON.stringify(item)))
+      .join(' | ');
   }
 
   switch (schema.type) {
@@ -79,7 +81,10 @@ const isEmptyDataSchema = (schema) => {
   if (!schema) return true;
   if (Object.keys(schema).length === 0) return true;
   if (!schema.type && !schema.properties && !schema.$ref) return true;
-  if (schema.type === 'object' && (!schema.properties || Object.keys(schema.properties).length === 0)) {
+  if (
+    schema.type === 'object' &&
+    (!schema.properties || Object.keys(schema.properties).length === 0)
+  ) {
     return true;
   }
   return false;
@@ -115,7 +120,11 @@ class TypeCollector {
       if (propSchema?.type === 'object' && propSchema.properties) {
         const nestedTypeName = `${typeName}${toPascalCase(rawName)}`;
         fieldType = this.collect(nestedTypeName, propSchema);
-      } else if (propSchema?.type === 'array' && propSchema.items?.type === 'object' && propSchema.items.properties) {
+      } else if (
+        propSchema?.type === 'array' &&
+        propSchema.items?.type === 'object' &&
+        propSchema.items.properties
+      ) {
         const itemTypeName = `${typeName}Item`;
         fieldType = `${this.collect(itemTypeName, propSchema.items)}[]`;
       }
@@ -179,7 +188,9 @@ const discoverSources = async (baseUrl, docsPage) => {
   }
 
   if (sources.length === 0) {
-    throw new Error(`未能从 ${docsUrl} 自动发现 API 规范，请在 api-gen.config.mjs 中手动配置 sources`);
+    throw new Error(
+      `未能从 ${docsUrl} 自动发现 API 规范，请在 api-gen.config.mjs 中手动配置 sources`,
+    );
   }
 
   return sources;
@@ -329,8 +340,7 @@ const generateApiFile = (operations, sourceName) => {
     const configItems = [];
     if (needsSkipAuth) configItems.push('_skipAuth: true');
 
-    const configArg =
-      configItems.length > 0 ? `, { ${configItems.join(', ')} }` : '';
+    const configArg = configItems.length > 0 ? `, { ${configItems.join(', ')} }` : '';
 
     const summary = operation.summary ? `/** ${operation.summary} */\n` : '';
     const fnName = operation.operationId;
@@ -430,12 +440,8 @@ const main = async () => {
     console.log('');
   }
 
-  const indexTypes = sources
-    .map((source) => `export * from './${source.name}';`)
-    .join('\n');
-  const indexApi = sources
-    .map((source) => `export * from './${source.name}';`)
-    .join('\n');
+  const indexTypes = sources.map((source) => `export * from './${source.name}';`).join('\n');
+  const indexApi = sources.map((source) => `export * from './${source.name}';`).join('\n');
 
   writeFile(
     path.join(rootDir, config.output.typesDir, 'index.ts'),

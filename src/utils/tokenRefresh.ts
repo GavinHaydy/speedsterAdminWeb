@@ -3,7 +3,7 @@ import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { refresh } from '@/api/generated/iam';
 import type { ApiResponse } from '@/types/api';
 
-import { applyTokenPair, clearAuth, getRefreshToken } from './auth';
+import { applyTokenPair, getRefreshToken } from './auth';
 
 let isRefreshing = false;
 let pendingQueue: Array<{
@@ -81,7 +81,6 @@ export const handleUnauthorized = async (
   } catch (refreshError) {
     const err = refreshError instanceof Error ? refreshError : new Error('刷新 token 失败');
     flushQueue(err);
-    clearAuth();
     window.location.href = '/login';
     return Promise.reject(err);
   } finally {

@@ -6,9 +6,14 @@ import { Button, Card, Form, Input, message } from 'antd';
 
 import { accountLogin, userPermission } from '@/api/generated/iam';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { login, selectUserLoading, setLoading, setLoginError } from '@/store/slices/userSlice';
+import {
+  login,
+  selectUserLoading,
+  setIsAdmin,
+  setLoading,
+  setLoginError,
+} from '@/store/slices/userSlice';
 import type { AccountLoginParams } from '@/types/generated/iam';
-import { setIsAdmin } from '@/utils/auth.ts';
 import { initWasm } from '@/utils/wasm.ts';
 
 import './index.css';
@@ -35,8 +40,7 @@ export default function Login() {
       dispatch(login(result));
 
       userPermission().then((r) => {
-        console.log(r.is_admin);
-        setIsAdmin(r.is_admin);
+        setIsAdmin(r);
       });
 
       navigate('/dashboard', { replace: true });

@@ -15,9 +15,9 @@ export const getIsAdmin = (): boolean => {
   return localStorage.getItem('isAdmin') === 'true';
 };
 
-export const setIsAdmin = (isAdmin: boolean): void => {
-  localStorage.setItem('isAdmin', String(isAdmin));
-};
+// export const setIsAdmin = (isAdmin: boolean): void => {
+//   localStorage.setItem('isAdmin', String(isAdmin));
+// };
 
 export const getRefreshToken = (): string | null => {
   return localStorage.getItem(REFRESH_TOKEN_KEY);
@@ -25,11 +25,6 @@ export const getRefreshToken = (): string | null => {
 
 export const setRefreshToken = (token: string): void => {
   localStorage.setItem(REFRESH_TOKEN_KEY, token);
-};
-
-export const clearAuth = (): void => {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(REFRESH_TOKEN_KEY);
 };
 
 /** 登录 / 刷新成功后写入 token */

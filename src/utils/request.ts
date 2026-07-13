@@ -9,7 +9,7 @@ import axios from 'axios';
 
 import type { ApiResponse } from '@/types/api';
 
-import { clearAuth, getToken } from './auth';
+import { getToken } from './auth';
 import { handleUnauthorized } from './tokenRefresh';
 
 // 扩展 InternalAxiosRequestConfig 类型
@@ -145,7 +145,6 @@ http.interceptors.response.use(
     const errorMsg = errorHandler(status, data?.msg || '');
 
     if (status === 401) {
-      clearAuth();
       window.location.href = '/login';
     } else if (config?.showError !== false) {
       notification.error({
