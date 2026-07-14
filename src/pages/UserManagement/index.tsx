@@ -1,95 +1,121 @@
+import { useCallback, useEffect, useState } from 'react';
+
 import { Avatar, Button, Form, Input, message, Popconfirm, Select, Space, Table, Tag } from 'antd';
+
+import { userList } from '@/api/generated/iam';
+import type { UserListParams, UserListResultItem } from '@/types/generated/iam';
 
 import './index.css';
 
-type FieldType = {
-  phone?: string;
-  nickname?: string;
-  status?: string;
-};
-
-const onFinish = (values: FieldType) => {
-  console.log('查询条件:', values);
-};
-interface DataType {
-  key: string;
-  userId: string;
-  avatar: string;
-  nickname: string;
-  phone: string;
-  tags: string[];
-  registerTime: string;
-  status: 'active' | 'banned';
-}
 // 模拟数据
-const mockData: DataType[] = [
-  {
-    key: '1',
-    userId: 'U10001',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-    nickname: '张三',
-    phone: '13800138001',
-    tags: ['新用户', 'VIP'],
-    registerTime: '2024-06-15 10:30:00',
-    status: 'active',
-  },
-  {
-    key: '2',
-    userId: 'U10002',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka',
-    nickname: '李四',
-    phone: '13800138002',
-    tags: ['活跃用户'],
-    registerTime: '2024-06-10 14:20:00',
-    status: 'active',
-  },
-  {
-    key: '3',
-    userId: 'U10003',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bob',
-    nickname: '王五',
-    phone: '13800138003',
-    tags: ['新用户'],
-    registerTime: '2024-06-20 09:15:00',
-    status: 'banned',
-  },
-];
+// const mockData: UserListResult[] = [
+//   {
+//     key: '1',
+//     userId: 'U10001',
+//     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
+//     nickname: '张三',
+//     phone: '13800138001',
+//     tags: ['新用户', 'VIP'],
+//     registerTime: '2024-06-15 10:30:00',
+//     status: 'active',
+//   },
+//   {
+//     key: '2',
+//     userId: 'U10002',
+//     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka',
+//     nickname: '李四',
+//     phone: '13800138002',
+//     tags: ['活跃用户'],
+//     registerTime: '2024-06-10 14:20:00',
+//     status: 'active',
+//   },
+//   {
+//     key: '3',
+//     userId: 'U10003',
+//     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bob',
+//     nickname: '王五',
+//     phone: '13800138003',
+//     tags: ['新用户'],
+//     registerTime: '2024-06-20 09:15:00',
+//     status: 'banned',
+//   },
+// ];
 export default function UserManagement() {
   const [form] = Form.useForm();
+  const [data, setData] = useState<UserListResultItem[]>([]);
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+  // ========== 获取数据接口调用 ==========
+  const fetchUserList = useCallback(async (params: UserListParams = {}) => {
+    setLoading(true);
+    try {
+      // 调用接口（不传参数或传空对象）
+      const response = await userList({
+        pageNo: 1,
+        pageSize: 10,
+        ...params,
+      });
+      console.log('接口返回数据:', response);
+      // 根据实际接口返回结构调整数据
+      // 假设返回的数据结构是 { data: { list: UserListResult[], total: number } }
+      setData(response.list || []);
+      setTotal(response.total || 0);
+      // 如果接口返回的是分页数据，可以这样处理：
+      // setData(response?.data?.list || []);
+      // setTotal(response?.data?.total || 0);
+    } catch (error) {
+      console.error('获取用户列表失败:', error);
+      message.error('获取用户列表失败');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // ========== 组件加载时自动获取数据 ==========
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchUserList({
+      pageNo: 1,
+      pageSize: 10,
+    });
+  }, [fetchUserList]);
+
+  const handleSearch = (values: UserListParams) => {
+    setPageNo(1);
+    fetchUserList({
+      ...values,
+      pageNo: 1,
+      pageSize,
+    });
+  };
 
   const handleReset = () => {
     form.resetFields();
-    onFinish({});
+    setPageNo(1);
+    fetchUserList({
+      pageNo: 1,
+      pageSize,
+    });
   };
+
   // 编辑
-  const handleEdit = (record: DataType) => {
+  const handleEdit = (record: UserListResultItem) => {
     message.info(`编辑用户：${record.nickname}`);
   };
 
   // 删除
-  const handleDelete = (record: DataType) => {
+  const handleDelete = (record: UserListResultItem) => {
     message.success(`已删除用户：${record.nickname}`);
   };
 
   // 表格列定义
   const columns = [
     {
-      title: '用户ID',
-      dataIndex: 'userId',
-      key: 'userId',
-      width: 100,
-    },
-    {
-      title: '头像',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      width: 80,
-      render: (avatar: string) => <Avatar src={avatar} size="large" />,
-    },
-    {
-      title: '昵称',
-      dataIndex: 'nickname',
-      key: 'nickname',
+      title: '用户名',
+      dataIndex: 'username',
+      key: 'username',
       width: 120,
     },
     {
@@ -99,44 +125,61 @@ export default function UserManagement() {
       width: 140,
     },
     {
-      title: '标签',
-      dataIndex: 'tags',
-      key: 'tags',
-      render: (tags: string[]) => (
-        <>
-          {tags.map((tag) => {
-            const color = tag === 'VIP' ? 'gold' : tag === '新用户' ? 'green' : 'blue';
-            return (
-              <Tag color={color} key={tag}>
-                {tag}
-              </Tag>
-            );
-          })}
-        </>
-      ),
+      title: '电子邮箱',
+      dataIndex: 'email',
+      key: 'email',
+      width: 200,
     },
     {
-      title: '注册时间',
-      dataIndex: 'registerTime',
-      key: 'registerTime',
-      width: 180,
+      title: '头像',
+      dataIndex: 'avatar',
+      key: 'avatar',
+      width: 80,
+      render: (avatar: string) => <Avatar src={avatar || undefined} size="large" />,
     },
+    {
+      title: '昵称',
+      dataIndex: 'nickname',
+      key: 'nickname',
+      width: 120,
+    },
+    // {
+    //   title: '标签',
+    //   dataIndex: 'tags',
+    //   key: 'tags',
+    //   render: (tags: string[]) => (
+    //     <>
+    //       {tags.map((tag) => {
+    //         const color = tag === 'VIP' ? 'gold' : tag === '新用户' ? 'green' : 'blue';
+    //         return (
+    //           <Tag color={color} key={tag}>
+    //             {tag}
+    //           </Tag>
+    //         );
+    //       })}
+    //     </>
+    //   ),
+    // },
+    // {
+    //   title: '注册时间',
+    //   dataIndex: 'registerTime',
+    //   key: 'registerTime',
+    //   width: 180,
+    // },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
       width: 100,
-      render: (status: string) => (
-        <Tag color={status === 'active' ? 'success' : 'error'}>
-          {status === 'active' ? '启用' : '封禁'}
-        </Tag>
+      render: (status: number) => (
+        <Tag color={status === 1 ? 'success' : 'error'}>{status === 1 ? '启用' : '封禁'}</Tag>
       ),
     },
     {
       title: '操作',
       key: 'action',
       width: 150,
-      render: (_: unknown, record: DataType) => (
+      render: (_: unknown, record: UserListResultItem) => (
         <Space size="middle">
           <Button type="link" size="small" onClick={() => handleEdit(record)}>
             编辑
@@ -159,23 +202,29 @@ export default function UserManagement() {
   return (
     <div className="management-page">
       <div className="management-search">
-        <Form form={form} name="userSearch" layout="inline" onFinish={onFinish} autoComplete="off">
-          <Form.Item<FieldType> name="phone" label="手机号码">
+        <Form
+          form={form}
+          name="userSearch"
+          layout="inline"
+          onFinish={handleSearch}
+          autoComplete="off"
+        >
+          <Form.Item<UserListParams> name="phone" label="手机号码">
             <Input placeholder="请输入手机号码" allowClear />
           </Form.Item>
 
-          <Form.Item<FieldType> name="nickname" label="用户名称">
+          <Form.Item<UserListParams> name="nickname" label="用户名称">
             <Input placeholder="请输入用户名称" allowClear />
           </Form.Item>
 
-          <Form.Item<FieldType> name="status" label="状态">
+          <Form.Item<UserListParams> name="status" label="状态">
             <Select
               placeholder="全部状态"
               allowClear
               style={{ width: 120 }}
               options={[
-                { value: 'active', label: '启用' },
-                { value: 'banned', label: '封禁' },
+                { value: 1, label: '启用' },
+                { value: 2, label: '封禁' },
               ]}
             />
           </Form.Item>
@@ -199,12 +248,25 @@ export default function UserManagement() {
       <div className="user-table">
         <Table
           columns={columns}
-          dataSource={mockData}
-          rowKey="key"
+          dataSource={data}
+          rowKey="username"
+          loading={loading}
           pagination={{
-            pageSize: 10,
+            current: pageNo,
+            pageSize: pageSize,
             showSizeChanger: true,
             showTotal: (total) => `共 ${total} 条`,
+            onChange: (newPageNo, newPageSize) => {
+              setPageNo(newPageNo);
+              setPageSize(newPageSize);
+              const values = form.getFieldsValue();
+              fetchUserList({
+                ...values,
+                pageNo: newPageNo,
+                pageSize: newPageSize,
+              });
+            },
+            total,
           }}
           scroll={{ x: 1000 }}
         />
