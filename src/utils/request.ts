@@ -7,9 +7,9 @@ import type {
 } from 'axios';
 import axios from 'axios';
 
+import { store } from '@/store';
 import type { ApiResponse } from '@/types/api';
 
-import { getToken } from './auth';
 import { handleUnauthorized } from './tokenRefresh';
 
 // 扩展 InternalAxiosRequestConfig 类型
@@ -47,7 +47,9 @@ const http = axios.create({
 http.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (!config._skipAuth) {
-      const token = getToken();
+      // const token = getToken();
+      const token = store.getState().auth.accessToken;
+      console.log('答：', token);
       if (token && config.headers) {
         config.headers.Authorization = `${token}`;
       }

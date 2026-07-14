@@ -79,6 +79,11 @@ export const status = (values: StatusParams) => {
   return request.put<unknown>('/api/user/status', values);
 };
 
+/** 用户信息 */
+export const userInfo = () => {
+  return request.get<unknown>('/api/user/userinfo');
+};
+
 /** 用户列表 */
 export const userList = (values: UserListParams) => {
   return request.post<UserListResult>('/api/user/userlist', values);
