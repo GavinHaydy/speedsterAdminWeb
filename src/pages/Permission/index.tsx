@@ -9,6 +9,7 @@ export const Permission = () => {
   const [permissions, setPermissions] = useState<PermissionListResult>({
     is_admin: false,
     list: [],
+    codes: [],
   });
 
   useEffect(() => {
