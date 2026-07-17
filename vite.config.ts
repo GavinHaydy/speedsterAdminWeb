@@ -12,7 +12,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://47.108.58.56:9527', // 后端接口地址
+        // target: 'http://47.108.58.56:9527', // 后端接口地址
+        target: 'http://localhost:9527', // 后端接口地址
         changeOrigin: true,
 
         rewrite: (path) => path.replace(/^\/api/, ''),

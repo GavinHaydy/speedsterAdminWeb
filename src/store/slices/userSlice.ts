@@ -1,12 +1,12 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '@/store';
-import type { UserPermissionResult } from '@/types/generated';
+import type { UserPermissionResult, UserPermissionResultItem } from '@/types/generated';
 import type { AccountLoginResult } from '@/types/generated/iam';
 import { getToken } from '@/utils/auth';
 
 interface User {
-  id: number;
+  id: string;
   nickname: string;
 }
 
@@ -16,6 +16,8 @@ interface UserState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  permissions: UserPermissionResultItem[];
+  permissionCodes: string[];
   loading: boolean;
   error: string | null;
 }
@@ -26,6 +28,8 @@ const initialState: UserState = {
   refreshToken: null,
   isAuthenticated: !!getToken(),
   isAdmin: false,
+  permissions: [],
+  permissionCodes: [],
   loading: false,
   error: null,
 };
@@ -49,8 +53,10 @@ export const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    setIsAdmin: (state, action: PayloadAction<UserPermissionResult>) => {
+    setPermissions: (state, action: PayloadAction<UserPermissionResult>) => {
       state.isAdmin = action.payload.is_admin;
+      state.permissions = action.payload.list;
+      state.permissionCodes = action.payload.codes;
     },
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
@@ -67,6 +73,8 @@ export const userSlice = createSlice({
       state.refreshToken = null;
       state.isAuthenticated = false;
       state.isAdmin = false;
+      state.permissions = [];
+      state.permissionCodes = [];
     },
     clearError: (state) => {
       state.error = null;
@@ -77,7 +85,7 @@ export const userSlice = createSlice({
 export const {
   setLoading,
   login,
-  setIsAdmin,
+  setPermissions,
   setUser,
   setToken,
   setLoginError,
@@ -90,7 +98,7 @@ export const selectCurrentUser = (state: RootState) => state.auth.user;
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;
 export const selectRefreshToken = (state: RootState) => state.auth.refreshToken;
 export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
-export const selectIsAdmin = (state: RootState) => state.auth.isAdmin;
+export const selectUserPermissions = (state: RootState) => state.auth.permissions;
 export const selectUserLoading = (state: RootState) => state.auth.loading;
 export const selectLoginError = (state: RootState) => state.auth.error;
 

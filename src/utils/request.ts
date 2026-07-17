@@ -48,8 +48,10 @@ http.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (!config._skipAuth) {
       // const token = getToken();
+      // const token = useSelector(selectAccessToken);
       const token = store.getState().auth.accessToken;
-      console.log('答：', token);
+
+      console.log(token);
       if (token && config.headers) {
         config.headers.Authorization = `${token}`;
       }

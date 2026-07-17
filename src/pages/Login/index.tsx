@@ -5,13 +5,14 @@ import { DashboardOutlined, LockOutlined, UserOutlined } from '@ant-design/icons
 import { Button, Card, Form, Input, message } from 'antd';
 
 import { accountLogin, userPermission } from '@/api/generated/iam';
+import { store } from '@/store';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   login,
   selectUserLoading,
-  setIsAdmin,
   setLoading,
   setLoginError,
+  setPermissions,
 } from '@/store/slices/userSlice';
 import type { AccountLoginParams } from '@/types/generated/iam';
 import { initWasm } from '@/utils/wasm.ts';
@@ -38,10 +39,14 @@ export default function Login() {
         password: window.encryptAES(values.password),
       });
       dispatch(login(result));
+      console.log(store.getState().auth);
 
-      userPermission().then((r) => {
-        setIsAdmin(r);
-      });
+      const permission = await userPermission();
+
+      dispatch(setPermissions(permission));
+      // userPermission().then((r) => {
+      //   setPermissions(r)
+      // });
 
       navigate('/dashboard', { replace: true });
     } catch (error) {
