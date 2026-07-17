@@ -3,7 +3,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/store';
 import type { UserPermissionResult, UserPermissionResultItem } from '@/types/generated';
 import type { AccountLoginResult } from '@/types/generated/iam';
-import { getToken } from '@/utils/auth';
+// import { getToken } from '@/utils/auth';
 
 interface User {
   id: string;
@@ -26,7 +26,7 @@ const initialState: UserState = {
   user: null,
   accessToken: null,
   refreshToken: null,
-  isAuthenticated: !!getToken(),
+  isAuthenticated: false,
   isAdmin: false,
   permissions: [],
   permissionCodes: [],

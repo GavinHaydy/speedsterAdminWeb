@@ -47,8 +47,6 @@ const http = axios.create({
 http.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (!config._skipAuth) {
-      // const token = getToken();
-      // const token = useSelector(selectAccessToken);
       const token = store.getState().auth.accessToken;
 
       console.log(token);

@@ -1,9 +1,9 @@
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 import { refresh } from '@/api/generated/iam';
+import { store } from '@/store';
+import { setToken } from '@/store/slices/userSlice.ts';
 import type { ApiResponse } from '@/types/api';
-
-import { applyTokenPair, getRefreshToken } from './auth';
 
 let isRefreshing = false;
 let pendingQueue: Array<{
@@ -24,13 +24,15 @@ const flushQueue = (error: Error | null, token: string | null = null) => {
 
 /** 使用 refreshToken 换取新的 accessToken */
 export const refreshAccessToken = async (): Promise<string> => {
-  const refreshToken = getRefreshToken();
+  const refreshToken = store.getState().auth.refreshToken;
   if (!refreshToken) {
     throw new Error('无 refresh token');
   }
 
   const data = await refresh({ refreshToken });
-  applyTokenPair(data);
+  // applyTokenPair(data);
+  store.dispatch(setToken(data));
+
   return data.accessToken;
 };
 
