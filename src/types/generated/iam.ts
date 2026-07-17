@@ -56,6 +56,7 @@ export interface PermissionListResultItem {
 }
 
 export interface PermissionListResult {
+  codes: string[];
   is_admin: boolean;
   list: PermissionListResultItem[];
 }
@@ -145,6 +146,7 @@ export interface UserListParams {
 export interface UserListResultItem {
   avatar: string;
   email: string;
+  id: string;
   nickname: string;
   phone: string;
   status: number;
@@ -199,6 +201,7 @@ export interface UserPermissionResultItem {
 }
 
 export interface UserPermissionResult {
+  codes: string[];
   is_admin: boolean;
   list: UserPermissionResultItem[];
 }
