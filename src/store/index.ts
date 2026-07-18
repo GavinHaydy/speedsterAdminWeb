@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 
+import lang from '@/store/lang.ts';
 import { configGenerator } from '@/store/persistPlugin.ts';
 
 import userReducer from './slices/userSlice';
@@ -9,7 +10,7 @@ import userReducer from './slices/userSlice';
 const rootReducer = combineReducers({
   auth: persistReducer(configGenerator('auth'), userReducer),
   // theme: persistReducer(configGenerator('theme'), themeReducer),
-  // lang: persistReducer(configGenerator('lang'), langReducer),
+  lang: persistReducer(configGenerator('lang'), lang),
 });
 
 export const store = configureStore({
