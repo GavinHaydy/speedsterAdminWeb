@@ -1,0 +1,13 @@
+{
+  "common": {},
+  "menu": {
+    "dashboard": "仪表盘",
+    "user": "用户管理",
+    "merchant": "商家管理",
+    "product": "商品管理",
+    "order": "订单管理",
+    "delivery": "配送管理",
+    "financial": "财务管理",
+    "marketing": "营销管理"
+  }
+}

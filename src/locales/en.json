@@ -1,0 +1,13 @@
+{
+  "common": {},
+  "menu": {
+    "dashboard": "Dashboard",
+    "user": "User",
+    "merchant": "Merchant",
+    "product": "Product",
+    "order": "Order",
+    "delivery": "Delivery",
+    "financial": "Financial",
+    "marketing": "Marketing"
+  }
+}
