@@ -61,17 +61,23 @@ import AuthGuard from './AuthGuard';
 import PermissionGuard from './PermissionGuard';
 import { routes } from './routes';
 
+interface RouteHandle {
+  permission?: string;
+}
+
 const routerConfig = routes.map((route) => {
   if (route.path === '/login') {
     return route;
   }
 
+  const permission = (route.handle as RouteHandle | undefined)?.permission;
+
   return {
     ...route,
     element: (
       <AuthGuard>
-        {route.permission ? (
-          <PermissionGuard permission={route.permission}>{route.element}</PermissionGuard>
+        {permission ? (
+          <PermissionGuard permission={permission}>{route.element}</PermissionGuard>
         ) : (
           route.element
         )}

@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, type RouteObject } from 'react-router-dom';
 
 import { GlobalLayout } from '@/layouts/MainLayout';
 import DashboardPage from '@/pages/Dashboard';
@@ -8,7 +8,7 @@ import { RootRedirect } from '@/router/RootRedirect.tsx';
 // import MerchantPage from '@/pages/Merchant';
 // import UserPage from '@/pages/User';
 
-export const routes = [
+export const routes: RouteObject[] = [
   {
     path: '/',
     element: <RootRedirect />,
@@ -27,12 +27,13 @@ export const routes = [
       },
       {
         path: '/dashboard',
-        permission: '',
         element: <DashboardPage />,
       },
       {
         path: '/user',
-        permission: 'user:menu',
+        handle: {
+          permission: 'user:menu',
+        },
         element: <UserManagement />,
       },
     ],
