@@ -49,7 +49,6 @@ http.interceptors.request.use(
     if (!config._skipAuth) {
       const token = store.getState().auth.accessToken;
 
-      console.log(token);
       if (token && config.headers) {
         config.headers.Authorization = `${token}`;
       }

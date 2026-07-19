@@ -5,10 +5,10 @@ import { DashboardOutlined, LockOutlined, UserOutlined } from '@ant-design/icons
 import { Button, Card, Form, Input, message } from 'antd';
 
 import { accountLogin, userPermission } from '@/api/generated/iam';
-import { store } from '@/store';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   login,
+  logout,
   selectUserLoading,
   setLoading,
   setLoginError,
@@ -25,6 +25,10 @@ export default function Login() {
   const loading = useAppSelector(selectUserLoading);
 
   useEffect(() => {
+    dispatch(logout());
+  }, [dispatch]);
+
+  useEffect(() => {
     async function load() {
       await initWasm();
     }
@@ -39,14 +43,10 @@ export default function Login() {
         password: window.encryptAES(values.password),
       });
       dispatch(login(result));
-      console.log(store.getState().auth);
 
       const permission = await userPermission();
 
       dispatch(setPermissions(permission));
-      // userPermission().then((r) => {
-      //   setPermissions(r)
-      // });
 
       navigate('/dashboard', { replace: true });
     } catch (error) {
