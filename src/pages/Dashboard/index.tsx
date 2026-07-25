@@ -25,7 +25,7 @@ export default function Dashboard() {
         <p>这里是 Speedster 外卖平台管理后台，你可以在此查看核心运营数据并管理业务模块。</p>
       </div>
 
-      <Row gutter={[16, 16]}>
+      <Row style={{ width: '99%' }} gutter={[10, 10]}>
         {statCards.map((item) => (
           <Col xs={24} sm={12} lg={6} key={item.label}>
             <Card className="dashboard-page-stat-card" variant={'borderless'}>
@@ -41,7 +41,7 @@ export default function Dashboard() {
         ))}
       </Row>
 
-      <Row gutter={[16, 16]}>
+      <Row style={{ width: '99%' }} gutter={[16, 16]}>
         <Col xs={24} lg={14}>
           <Card title="数据概览" variant={'borderless'} className="dashboard-page-quick-card">
             <Typography.Paragraph type="secondary" className="dashboard-page-overview-desc">

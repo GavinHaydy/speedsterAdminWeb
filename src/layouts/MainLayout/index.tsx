@@ -124,13 +124,17 @@ const siderStyle: React.CSSProperties = {
   lineHeight: '120px',
 };
 
+const heightStyle: React.CSSProperties = {
+  height: '4vh',
+};
+
 export const GlobalLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
     <Flex gap="middle" wrap>
       <Layout>
-        <Header style={{ padding: '5px 10px 0 10px' }}>
+        <Header style={heightStyle}>
           <HeaderComponent />
         </Header>
         <Layout>
