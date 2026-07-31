@@ -7,39 +7,6 @@ import type { UserListParams, UserListResultItem } from '@/types/generated/iam';
 
 import './index.css';
 
-// 模拟数据
-// const mockData: UserListResult[] = [
-//   {
-//     key: '1',
-//     userId: 'U10001',
-//     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-//     nickname: '张三',
-//     phone: '13800138001',
-//     tags: ['新用户', 'VIP'],
-//     registerTime: '2024-06-15 10:30:00',
-//     status: 'active',
-//   },
-//   {
-//     key: '2',
-//     userId: 'U10002',
-//     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka',
-//     nickname: '李四',
-//     phone: '13800138002',
-//     tags: ['活跃用户'],
-//     registerTime: '2024-06-10 14:20:00',
-//     status: 'active',
-//   },
-//   {
-//     key: '3',
-//     userId: 'U10003',
-//     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Bob',
-//     nickname: '王五',
-//     phone: '13800138003',
-//     tags: ['新用户'],
-//     registerTime: '2024-06-20 09:15:00',
-//     status: 'banned',
-//   },
-// ];
 export default function UserManagement() {
   const [form] = Form.useForm();
   const [data, setData] = useState<UserListResultItem[]>([]);
@@ -88,7 +55,7 @@ export default function UserManagement() {
       ...values,
       pageNo: 1,
       pageSize,
-    });
+    }).then((r) => r);
   };
 
   const handleReset = () => {
@@ -97,17 +64,17 @@ export default function UserManagement() {
     fetchUserList({
       pageNo: 1,
       pageSize,
-    });
+    }).then((r) => r);
   };
 
   // 编辑
   const handleEdit = (record: UserListResultItem) => {
-    message.info(`编辑用户：${record.nickname}`);
+    message.info(`编辑用户：${record.nickname}`).then();
   };
 
   // 删除
   const handleDelete = (record: UserListResultItem) => {
-    message.success(`已删除用户：${record.nickname}`);
+    message.success(`已删除用户：${record.nickname}`).then();
   };
 
   // 表格列定义
@@ -213,8 +180,12 @@ export default function UserManagement() {
             <Input placeholder="请输入手机号码" allowClear />
           </Form.Item>
 
-          <Form.Item<UserListParams> name="nickname" label="用户名称">
-            <Input placeholder="请输入用户名称" allowClear />
+          <Form.Item<UserListParams> name="username" label="用户名">
+            <Input placeholder="请输入用户名" allowClear />
+          </Form.Item>
+
+          <Form.Item<UserListParams> name="nickname" label="用户昵称">
+            <Input placeholder="请输入用户昵称" allowClear />
           </Form.Item>
 
           <Form.Item<UserListParams> name="status" label="状态">
@@ -264,7 +235,7 @@ export default function UserManagement() {
                 ...values,
                 pageNo: newPageNo,
                 pageSize: newPageSize,
-              });
+              }).then((r) => r);
             },
             total,
           }}

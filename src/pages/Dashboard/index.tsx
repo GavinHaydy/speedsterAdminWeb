@@ -11,10 +11,10 @@ const statCards = [
 ];
 
 const quickEntries = [
-  { title: '订单管理', desc: '查看与处理平台订单' },
-  { title: '商家管理', desc: '审核入驻与运营状态' },
-  { title: '用户管理', desc: '维护 C 端用户信息' },
-  { title: '系统设置', desc: '配置平台基础参数' },
+  { title: '订单管理', desc: '查看与处理平台订单', url: '/order' },
+  { title: '商家管理', desc: '审核入驻与运营状态', url: '/merchant' },
+  { title: '用户管理', desc: '维护 C 端用户信息', url: '/user' },
+  { title: '系统设置', desc: '配置平台基础参数', url: '/settings' },
 ];
 
 export default function Dashboard() {
@@ -58,7 +58,9 @@ export default function Dashboard() {
                   <ShopOutlined />
                 </div>
                 <div>
-                  <div className="dashboard-page-quick-title">{item.title}</div>
+                  <div className="dashboard-page-quick-title">
+                    <a href={item.url}>{item.title}</a>
+                  </div>
                   <div className="dashboard-page-quick-desc">{item.desc}</div>
                 </div>
               </div>
