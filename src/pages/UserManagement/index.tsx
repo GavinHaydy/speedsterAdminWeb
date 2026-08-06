@@ -90,12 +90,14 @@ export default function UserManagement() {
       dataIndex: 'phone',
       key: 'phone',
       width: 140,
+      render: (text: string) => <div>{text == '' ? '-' : text}</div>,
     },
     {
       title: '电子邮箱',
       dataIndex: 'email',
       key: 'email',
       width: 200,
+      render: (text: string) => <div>{text == '' ? '-' : text}</div>,
     },
     {
       title: '头像',
