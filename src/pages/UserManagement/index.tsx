@@ -1,6 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { Avatar, Button, Form, Input, message, Popconfirm, Select, Space, Table, Tag } from 'antd';
+import {
+  Avatar,
+  Button,
+  Form,
+  Input,
+  message,
+  Modal,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+  Tag,
+} from 'antd';
 
 import { userList } from '@/api/generated/iam';
 import type { UserListParams, UserListResultItem } from '@/types/generated/iam';
@@ -75,6 +87,12 @@ export default function UserManagement() {
   // 删除
   const handleDelete = (record: UserListResultItem) => {
     message.success(`已删除用户：${record.nickname}`).then();
+  };
+
+  // 新增用户
+  const [modalStatus, setModalStatus] = useState(false);
+  const handleOpenModal = () => {
+    setModalStatus(true);
   };
 
   // 表格列定义
@@ -214,7 +232,7 @@ export default function UserManagement() {
         </Form>
       </div>
       <div className="create-btn">
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" onClick={handleOpenModal}>
           + 新建用户
         </Button>
       </div>
@@ -244,6 +262,7 @@ export default function UserManagement() {
           scroll={{ x: 1000 }}
         />
       </div>
+      <Modal open={modalStatus}>test</Modal>
     </div>
   );
 }
