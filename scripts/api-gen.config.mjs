@@ -1,6 +1,7 @@
 /** @type {import('./generate-api.mjs').ApiGenConfig} */
 export default {
-  baseUrl: 'http://47.108.58.56:9527',
+  // baseUrl: 'http://47.108.58.56:9527',
+  baseUrl: 'http://localhost:9527',
   docsPage: '/docs',
   sources: [],
   output: {

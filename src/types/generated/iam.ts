@@ -1,6 +1,18 @@
 // 由 scripts/generate-api.mjs 自动生成，请勿手动修改
 // 来源: iam
 
+export interface CreatePermissionParams {
+  code: string;
+  icon?: string;
+  method?: string;
+  name: string;
+  parentId: number;
+  path?: string;
+  sort: number;
+  status?: number;
+  type: number;
+}
+
 export interface GetRolePermissionsParams {
   roleId: number;
 }

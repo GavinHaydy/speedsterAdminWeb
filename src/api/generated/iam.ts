@@ -4,6 +4,7 @@
 import type {
   AccountLoginParams,
   AccountLoginResult,
+  CreatePermissionParams,
   CreateRoleParams,
   DelRoleParams,
   GetRolePermissionsParams,
@@ -23,6 +24,11 @@ import type {
   UserPermissionResult,
 } from '@/types/generated/iam';
 import request from '@/utils/request';
+
+/** 新增权限 */
+export const createPermission = (values: CreatePermissionParams) => {
+  return request.post<unknown>('/api/permission/createPermission', values);
+};
 
 /** 角色权限 */
 export const getRolePermissions = (values: GetRolePermissionsParams) => {
@@ -92,4 +98,9 @@ export const userList = (values: UserListParams) => {
 /** 用户权限列表 */
 export const userPermission = () => {
   return request.get<UserPermissionResult>('/api/user/userpermission');
+};
+
+/** 临时验证 */
+export const verify = () => {
+  return request.get<unknown>('/api/user/verify');
 };

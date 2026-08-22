@@ -24,6 +24,18 @@ const rootDir = path.resolve(__dirname, '..');
 const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'];
 const PUBLIC_PATH_HEURISTIC = /\/(login|refresh|register|signup)(\/|$)/i;
 
+const updateName = (operation) => {
+  console.log("============",operation);
+  if (operation?.["tags"]) {
+    const groupName = operation?.["tags"][0].split("-")[0].toLowerCase();
+    return  operation.operationId.startsWith(groupName)
+      ? toCamelCase(operation.operationId.slice(groupName.length))
+      : toCamelCase(operation.operationId);
+  }
+  return toCamelCase(operation.operationId);
+
+}
+
 const toPascalCase = (value) =>
   value
     .replace(/[^a-zA-Z0-9]+/g, ' ')
@@ -272,7 +284,10 @@ const parseOperations = (spec, sourceName) => {
   for (const [routePath, methods] of Object.entries(spec.paths ?? {})) {
     for (const method of HTTP_METHODS) {
       const operation = methods?.[method];
+
+
       if (!operation) continue;
+      const [groupName, up] = updateName(operation)
 
       const bodyParam = operation.parameters?.find((item) => item.in === 'body');
       const responseSchema = operation.responses?.['200']?.schema;
@@ -284,7 +299,7 @@ const parseOperations = (spec, sourceName) => {
         method: method.toUpperCase(),
         path: routePath,
         summary: operation.summary ?? '',
-        operationId: operation.operationId ?? toCamelCase(`${method}_${routePath}`),
+        operationId: updateName(operation) ?? toCamelCase(`${method}_${routePath}`),
         bodySchema: bodyParam?.schema ?? null,
         dataSchema: isEmptyDataSchema(dataSchema) ? null : dataSchema,
         skipAuth,
@@ -303,7 +318,7 @@ const generateTypesFile = (operations, sourceName) => {
   const collector = new TypeCollector();
 
   for (const operation of operations) {
-    const baseName = toPascalCase(operation.operationId);
+    const baseName = toPascalCase(updateName(operation));
 
     if (operation.bodySchema) {
       collector.collect(`${baseName}Params`, operation.bodySchema);
@@ -328,7 +343,7 @@ const generateApiFile = (operations, sourceName) => {
   const functions = [];
 
   for (const operation of operations) {
-    const baseName = toPascalCase(operation.operationId);
+    const baseName = toPascalCase(updateName(operation));
     const paramsType = operation.bodySchema ? `${baseName}Params` : null;
     const resultType = operation.dataSchema ? `${baseName}Result` : 'unknown';
     const apiPath = `${config.apiPrefix}${operation.path}`;
@@ -343,7 +358,7 @@ const generateApiFile = (operations, sourceName) => {
     const configArg = configItems.length > 0 ? `, { ${configItems.join(', ')} }` : '';
 
     const summary = operation.summary ? `/** ${operation.summary} */\n` : '';
-    const fnName = operation.operationId;
+    const fnName = updateName(operation);
 
     let fnBody = '';
 

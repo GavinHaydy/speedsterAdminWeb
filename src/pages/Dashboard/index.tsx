@@ -1,5 +1,9 @@
+import { useEffect } from 'react';
+
 import { DollarOutlined, ShopOutlined, ShoppingOutlined, UserAddOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Typography } from 'antd';
+
+import { verify } from '@/api/generated';
 
 import './index.css';
 
@@ -18,6 +22,9 @@ const quickEntries = [
 ];
 
 export default function Dashboard() {
+  useEffect(() => {
+    verify().then();
+  }, []);
   return (
     <div className="dashboard-page">
       <div className="dashboard-page-welcome">
