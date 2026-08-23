@@ -14,13 +14,14 @@ import {
   Tag,
 } from 'antd';
 
-import { userList } from '@/api/generated/iam';
-import type { UserListParams, UserListResultItem } from '@/types/generated/iam';
+import { register, userList } from '@/api/generated/iam';
+import type { RegisterParams, UserListParams, UserListResultItem } from '@/types/generated/iam';
 
 import './index.css';
 
 export default function UserManagement() {
   const [form] = Form.useForm();
+  const [createForm] = Form.useForm<RegisterParams>();
   const [data, setData] = useState<UserListResultItem[]>([]);
   const [pageNo, setPageNo] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -93,6 +94,25 @@ export default function UserManagement() {
   const [modalStatus, setModalStatus] = useState(false);
   const handleOpenModal = () => {
     setModalStatus(true);
+  };
+
+  const cancelModal = () => {
+    setModalStatus(false);
+  };
+
+  const handleOk = () => {
+    createForm.submit();
+  };
+
+  const handleFinish = async (values: RegisterParams) => {
+    try {
+      const r = await register(values, false);
+      void message.success(r.user_id);
+      createForm.resetFields();
+      setModalStatus(false);
+    } catch (error) {
+      void message.error(error instanceof Error ? error.message : '');
+    }
   };
 
   // 表格列定义
@@ -262,7 +282,32 @@ export default function UserManagement() {
           scroll={{ x: 1000 }}
         />
       </div>
-      <Modal open={modalStatus}>test</Modal>
+      <Modal open={modalStatus} onCancel={cancelModal} onOk={handleOk}>
+        <Form form={createForm} layout="vertical" onFinish={handleFinish}>
+          <Form.Item
+            label={'用户名'}
+            name={'username'}
+            rules={[{ required: true, message: '请输入用户名' }]}
+          >
+            <Input style={{ width: '40%' }} />
+          </Form.Item>
+
+          <Form.Item
+            label={'密码'}
+            name={'password'}
+            rules={[{ required: true, message: '请输入密码' }]}
+          >
+            <Input style={{ width: '40%' }} />
+          </Form.Item>
+          <Form.Item label={'邮箱'} name={'email'}>
+            <Input style={{ width: '40%' }} />
+          </Form.Item>
+
+          <Form.Item label={'手机号'} name={'phone'}>
+            <Input style={{ width: '40%' }} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 }

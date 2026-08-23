@@ -26,63 +26,78 @@ import type {
 import request from '@/utils/request';
 
 /** 新增权限 */
-export const createPermission = (values: CreatePermissionParams) => {
-  return request.post<unknown>('/api/permission/createPermission', values);
+export const createPermission = (values: CreatePermissionParams, showError?: boolean) => {
+  return request.post<unknown>('/api/permission/createPermission', values, {
+    showError: showError,
+  });
 };
 
 /** 角色权限 */
-export const getRolePermissions = (values: GetRolePermissionsParams) => {
-  return request.post<GetRolePermissionsResult>('/api/permission/getRolePermissions', values);
+export const getRolePermissions = (values: GetRolePermissionsParams, showError?: boolean) => {
+  return request.post<GetRolePermissionsResult>('/api/permission/getRolePermissions', values, {
+    showError: showError,
+  });
 };
 
 /** 权限列表 */
-export const permissionList = (values: PermissionListParams) => {
-  return request.post<PermissionListResult>('/api/permission/permissionlist', values);
+export const permissionList = (values: PermissionListParams, showError?: boolean) => {
+  return request.post<PermissionListResult>('/api/permission/permissionlist', values, {
+    showError: showError,
+  });
 };
 
 /** 新建角色 */
-export const createRole = (values: CreateRoleParams) => {
-  return request.post<unknown>('/api/role/create', values);
+export const createRole = (values: CreateRoleParams, showError?: boolean) => {
+  return request.post<unknown>('/api/role/create', values, { showError: showError });
 };
 
 /** 删除角色 */
-export const delRole = (values: DelRoleParams) => {
-  return request.delete<unknown>('/api/role/delete', { data: values });
+export const delRole = (values: DelRoleParams, showError?: boolean) => {
+  return request.delete<unknown>('/api/role/delete', { data: values, showError: showError });
 };
 
 /** 角色列表 */
-export const roleList = (values: RoleListParams) => {
-  return request.post<RoleListResult>('/api/role/rolelist', values);
+export const roleList = (values: RoleListParams, showError?: boolean) => {
+  return request.post<RoleListResult>('/api/role/rolelist', values, { showError: showError });
 };
 
 /** 修改角色 */
-export const updateRole = (values: UpdateRoleParams) => {
-  return request.put<unknown>('/api/role/update', values);
+export const updateRole = (values: UpdateRoleParams, showError?: boolean) => {
+  return request.put<unknown>('/api/role/update', values, { showError: showError });
 };
 
 /** 登录 */
-export const accountLogin = (values: AccountLoginParams) => {
-  return request.post<AccountLoginResult>('/api/user/login', values, { _skipAuth: true });
+export const accountLogin = (values: AccountLoginParams, showError?: boolean) => {
+  return request.post<AccountLoginResult>('/api/user/login', values, {
+    _skipAuth: true,
+    showError: showError,
+  });
 };
 
 /** 退出登录 */
-export const accountLogout = () => {
-  return request.delete<unknown>('/api/user/logout');
+export const accountLogout = (showError?: boolean) => {
+  return request.delete<unknown>('/api/user/logout', { showError: showError });
 };
 
 /** 刷新token */
-export const refresh = (values: RefreshParams) => {
-  return request.post<RefreshResult>('/api/user/refresh', values, { _skipAuth: true });
+export const refresh = (values: RefreshParams, showError?: boolean) => {
+  return request.post<RefreshResult>('/api/user/refresh', values, {
+    _skipAuth: true,
+    showError: showError,
+  });
 };
 
 /** 注册 */
-export const register = (values: RegisterParams) => {
-  return request.post<RegisterResult>('/api/user/register', values, { _skipAuth: true });
+export const register = (values: RegisterParams, showError?: boolean) => {
+  return request.post<RegisterResult>('/api/user/register', values, {
+    _skipAuth: true,
+    showError: showError,
+  });
 };
 
 /** 修改用户状态 */
-export const status = (values: StatusParams) => {
-  return request.put<unknown>('/api/user/status', values);
+export const status = (values: StatusParams, showError?: boolean) => {
+  return request.put<unknown>('/api/user/status', values, { showError: showError });
 };
 
 /** 用户信息 */
@@ -91,8 +106,8 @@ export const userInfo = () => {
 };
 
 /** 用户列表 */
-export const userList = (values: UserListParams) => {
-  return request.post<UserListResult>('/api/user/userlist', values);
+export const userList = (values: UserListParams, showError?: boolean) => {
+  return request.post<UserListResult>('/api/user/userlist', values, { showError: showError });
 };
 
 /** 用户权限列表 */

@@ -54,7 +54,7 @@ http.interceptors.request.use(
       }
     }
 
-    return { ...config, showError: true };
+    return { ...config };
   },
   (error: AxiosError) => {
     return Promise.reject(error);
@@ -105,6 +105,7 @@ http.interceptors.response.use(
       return { ...response, data: data.data };
     }
 
+    console.log(config.showError);
     if (config.showError !== false) {
       notification.error({
         message: '请求失败',

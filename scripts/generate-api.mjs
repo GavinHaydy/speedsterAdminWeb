@@ -354,6 +354,8 @@ const generateApiFile = (operations, sourceName) => {
 
     const configItems = [];
     if (needsSkipAuth) configItems.push('_skipAuth: true');
+    console.log("===========",paramsType);
+    if (paramsType != null) configItems.push('showError: showError');
 
     const configArg = configItems.length > 0 ? `, { ${configItems.join(', ')} }` : '';
 
@@ -365,23 +367,23 @@ const generateApiFile = (operations, sourceName) => {
     switch (operation.method) {
       case 'GET':
         fnBody = paramsType
-          ? `export const ${fnName} = (params: ${paramsType}) => {\n  return request.get<${resultType}>('${apiPath}', { params${needsSkipAuth ? ', _skipAuth: true' : ''} });\n};`
+          ? `export const ${fnName} = (params: ${paramsType},showError?: boolean) => {\n  return request.get<${resultType}>('${apiPath}', { params${needsSkipAuth ? ', _skipAuth: true' : ''} });\n};`
           : `export const ${fnName} = () => {\n  return request.get<${resultType}>('${apiPath}'${configArg});\n};`;
         break;
       case 'POST':
         fnBody = paramsType
-          ? `export const ${fnName} = (values: ${paramsType}) => {\n  return request.post<${resultType}>('${apiPath}', values${configArg});\n};`
+          ? `export const ${fnName} = (values: ${paramsType},showError?: boolean) => {\n  return request.post<${resultType}>('${apiPath}', values${configArg});\n};`
           : `export const ${fnName} = () => {\n  return request.post<${resultType}>('${apiPath}'${configArg});\n};`;
         break;
       case 'PUT':
         fnBody = paramsType
-          ? `export const ${fnName} = (values: ${paramsType}) => {\n  return request.put<${resultType}>('${apiPath}', values${configArg});\n};`
+          ? `export const ${fnName} = (values: ${paramsType},showError?: boolean) => {\n  return request.put<${resultType}>('${apiPath}', values${configArg});\n};`
           : `export const ${fnName} = () => {\n  return request.put<${resultType}>('${apiPath}'${configArg});\n};`;
         break;
       case 'DELETE':
         fnBody = paramsType
-          ? `export const ${fnName} = (values: ${paramsType}) => {\n  return request.delete<${resultType}>('${apiPath}', { data: values${needsSkipAuth ? ', _skipAuth: true' : ''} });\n};`
-          : `export const ${fnName} = () => {\n  return request.delete<${resultType}>('${apiPath}'${configArg});\n};`;
+          ? `export const ${fnName} = (values: ${paramsType},showError?: boolean) => {\n  return request.delete<${resultType}>('${apiPath}', { data: values${needsSkipAuth ? ', _skipAuth: true' : '',',showError:showError'} });\n};`
+          : `export const ${fnName} = (showError?: boolean) => {\n  return request.delete<${resultType}>('${apiPath}'${configArg},{showError:showError});\n};`;
         break;
       default:
         fnBody = `// 未支持的方法: ${operation.method} ${operation.path}`;
