@@ -10,12 +10,17 @@ import {
   Popconfirm,
   Select,
   Space,
+  Switch,
   Table,
-  Tag,
 } from 'antd';
 
-import { register, userList } from '@/api/generated/iam';
-import type { RegisterParams, UserListParams, UserListResultItem } from '@/types/generated/iam';
+import { register, status, userList } from '@/api/generated/iam';
+import type {
+  RegisterParams,
+  StatusParams,
+  UserListParams,
+  UserListResultItem,
+} from '@/types/generated/iam';
 
 import './index.css';
 
@@ -115,6 +120,30 @@ export default function UserManagement() {
     }
   };
 
+  const handleStatusChange = async (values: StatusParams) => {
+    // 保存原状态，用于失败回滚
+    const oldData = data;
+
+    // 先更新 UI
+    setData((prev) =>
+      prev.map((item) => (item.id === values.id ? { ...item, status: values.status } : item)),
+    );
+
+    try {
+      await status(values);
+
+      await fetchUserList({
+        pageNo: 1,
+        pageSize: 10,
+      });
+    } catch (error) {
+      // 失败回滚
+      setData(oldData);
+
+      message.error(error instanceof Error ? error.message : '状态修改失败');
+    }
+  };
+
   // 表格列定义
   const columns = [
     {
@@ -178,8 +207,16 @@ export default function UserManagement() {
       dataIndex: 'status',
       key: 'status',
       width: 100,
-      render: (status: number) => (
-        <Tag color={status === 1 ? 'success' : 'error'}>{status === 1 ? '启用' : '封禁'}</Tag>
+      render: (status: number, record: UserListResultItem) => (
+        // <Tag color={status === 1 ? 'success' : 'error'}>{status === 1 ? '启用' : '封禁'}</Tag>
+        <Switch
+          checked={status === 1}
+          checkedChildren={'启用'}
+          unCheckedChildren={'封禁'}
+          onChange={(checked) => {
+            void handleStatusChange({ id: record.id, status: checked ? 1 : 2 });
+          }}
+        />
       ),
     },
     {
