@@ -3,6 +3,7 @@
   "menu": {
     "dashboard": "仪表盘",
     "user": "用户管理",
+    "role": "角色管理",
     "merchant": "商家管理",
     "product": "商品管理",
     "order": "订单管理",

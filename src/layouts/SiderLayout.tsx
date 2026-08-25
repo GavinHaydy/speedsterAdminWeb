@@ -39,6 +39,7 @@ export const MenuLayout: React.FC = () => {
   const items: ItemType[] = [
     getItem('menu.dashboard', '/dashboard', <HomeOutlined />),
     getItem('menu.user', '/user', <IconFont type={'icon-connect'} />),
+    getItem('menu.role', '/role', <IconFont type={'icon-invite'} />),
     getItem('menu.merchant', '/merchant', <IconFont type={'icon-scene'} />),
     getItem('menu.product', '/product', <IconFont type={'icon-performance'} />),
     getItem('menu.order', '/order', <IconFont type={'icon-web-auto'} />),

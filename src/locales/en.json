@@ -3,6 +3,7 @@
   "menu": {
     "dashboard": "Dashboard",
     "user": "User",
+    "role": "Role",
     "merchant": "Merchant",
     "product": "Product",
     "order": "Order",

@@ -3,6 +3,7 @@ import { Navigate, type RouteObject } from 'react-router-dom';
 import { GlobalLayout } from '@/layouts/MainLayout';
 import DashboardPage from '@/pages/Dashboard';
 import LoginPage from '@/pages/Login';
+import { RoleManagement } from '@/pages/RoleManagement';
 import UserManagement from '@/pages/UserManagement';
 import { RootRedirect } from '@/router/RootRedirect.tsx';
 // import MerchantPage from '@/pages/Merchant';
@@ -35,6 +36,13 @@ export const routes: RouteObject[] = [
           permission: 'user:menu',
         },
         element: <UserManagement />,
+      },
+      {
+        path: '/role',
+        handle: {
+          permission: 'role:menu',
+        },
+        element: <RoleManagement />,
       },
     ],
   },
