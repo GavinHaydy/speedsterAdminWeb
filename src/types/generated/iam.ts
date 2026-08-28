@@ -91,13 +91,18 @@ export interface RoleListParams {
   status?: number;
 }
 
-export interface RoleListResult {
+export interface RoleListResultItem {
   code: string;
   create_time: string;
   desctiption: string;
   name: string;
   status: number;
   update_time: string;
+}
+
+export interface RoleListResult {
+  list: RoleListResultItem[];
+  total: number;
 }
 
 export interface UpdateRoleParams {

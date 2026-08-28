@@ -2,38 +2,39 @@ import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://47.108.58.56:9527', // 后端接口地址
-        changeOrigin: true,
-
-        rewrite: (path) => path.replace(/^\/api/, ''),
+export default defineConfig(({ mode }) => {
+  return {
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
-  },
-  build: {
-    chunkSizeWarningLimit: 1500,
-    rolldownOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return id.toString().split('node_modules/')[1].split('/')[0].toString();
-          }
+    server: {
+      proxy: {
+        '/api': {
+          target: mode === 'dev' ? 'http://47.108.58.56:9527' : 'http://localhost:9527',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
         },
-        entryFileNames: 'assets/js/[name].[hash].js',
-        chunkFileNames: 'assets/js/[name].[hash].js',
-        assetFileNames: 'assets/[ext]/[name].[hash].[ext]',
       },
     },
-    outDir: 'speedsterDist',
-    sourcemap: true,
-  },
+    build: {
+      chunkSizeWarningLimit: 1500,
+      rolldownOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return id.toString().split('node_modules/')[1].split('/')[0].toString();
+            }
+          },
+          entryFileNames: 'assets/js/[name].[hash].js',
+          chunkFileNames: 'assets/js/[name].[hash].js',
+          assetFileNames: 'assets/[ext]/[name].[hash].[ext]',
+        },
+      },
+      outDir: 'speedsterDist',
+      sourcemap: true,
+    },
+  };
 });
