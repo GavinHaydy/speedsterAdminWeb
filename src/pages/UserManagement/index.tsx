@@ -11,10 +11,10 @@ import {
   Select,
   Space,
   Switch,
-  Table,
 } from 'antd';
 
 import { register, status, userList } from '@/api/generated/iam';
+import CrudTable from '@/components/ListComponent';
 import type {
   RegisterParams,
   StatusParams,
@@ -244,81 +244,73 @@ export default function UserManagement() {
     },
   ];
   return (
-    <div className="management-page">
-      <div className="management-search">
-        <Form
-          form={form}
-          name="userSearch"
-          layout="inline"
-          onFinish={handleSearch}
-          autoComplete="off"
-        >
-          <Form.Item<UserListParams> name="phone" label="手机号码">
-            <Input placeholder="请输入手机号码" allowClear />
-          </Form.Item>
+    <>
+      <CrudTable<UserListResultItem>
+        search={
+          <Form form={form} onFinish={handleSearch} layout="inline" autoComplete="off">
+            <Form.Item<UserListParams> name="phone" label="手机号码">
+              <Input placeholder="请输入手机号码" allowClear />
+            </Form.Item>
 
-          <Form.Item<UserListParams> name="username" label="用户名">
-            <Input placeholder="请输入用户名" allowClear />
-          </Form.Item>
+            <Form.Item<UserListParams> name="username" label="用户名">
+              <Input placeholder="请输入用户名" allowClear />
+            </Form.Item>
 
-          <Form.Item<UserListParams> name="nickname" label="用户昵称">
-            <Input placeholder="请输入用户昵称" allowClear />
-          </Form.Item>
+            <Form.Item<UserListParams> name="nickname" label="用户昵称">
+              <Input placeholder="请输入用户昵称" allowClear />
+            </Form.Item>
 
-          <Form.Item<UserListParams> name="status" label="状态">
-            <Select
-              placeholder="全部状态"
-              allowClear
-              style={{ width: 120 }}
-              options={[
-                { value: 1, label: '启用' },
-                { value: 2, label: '封禁' },
-              ]}
-            />
-          </Form.Item>
+            <Form.Item<UserListParams> name="status" label="状态">
+              <Select
+                placeholder="全部状态"
+                allowClear
+                style={{ width: 120 }}
+                options={[
+                  { value: 1, label: '启用' },
+                  { value: 2, label: '封禁' },
+                ]}
+              />
+            </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              查询
-            </Button>
-          </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+            </Form.Item>
 
-          <Form.Item>
-            <Button onClick={handleReset}>重置</Button>
-          </Form.Item>
-        </Form>
-      </div>
-      <div className="create-btn">
-        <Button type="primary" htmlType="submit" onClick={handleOpenModal}>
-          + 新建用户
-        </Button>
-      </div>
-      <div className="user-table">
-        <Table
-          columns={columns}
-          dataSource={data}
-          rowKey="username"
-          loading={loading}
-          pagination={{
-            current: pageNo,
-            pageSize: pageSize,
-            showSizeChanger: true,
-            showTotal: (total) => `共 ${total} 条`,
-            onChange: (newPageNo, newPageSize) => {
-              setPageNo(newPageNo);
-              setPageSize(newPageSize);
-              const values = form.getFieldsValue();
-              fetchUserList({
-                ...values,
-                pageNo: newPageNo,
-                pageSize: newPageSize,
-              }).then((r) => r);
-            },
-            total,
-          }}
-          scroll={{ x: 1000 }}
-        />
-      </div>
+            <Form.Item>
+              <Button onClick={handleReset}>重置</Button>
+            </Form.Item>
+          </Form>
+        }
+        actions={
+          <Button type="primary" htmlType="submit" onClick={handleOpenModal}>
+            + 新建用户
+          </Button>
+        }
+        dataSource={data}
+        columns={columns}
+        rowKey="username"
+        loading={loading}
+        pagination={{
+          current: pageNo,
+          pageSize: pageSize,
+          showSizeChanger: true,
+          showTotal: (total) => `共 ${total} 条`,
+          onChange: (newPageNo, newPageSize) => {
+            setPageNo(newPageNo);
+            setPageSize(newPageSize);
+            const values = form.getFieldsValue();
+            fetchUserList({
+              ...values,
+              pageNo: newPageNo,
+              pageSize: newPageSize,
+            }).then((r) => r);
+          },
+          total,
+        }}
+      />
+
       <Modal open={modalStatus} onCancel={cancelModal} onOk={handleOk}>
         <Form form={createForm} layout="vertical" onFinish={handleFinish}>
           <Form.Item
@@ -345,6 +337,6 @@ export default function UserManagement() {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </>
   );
 }

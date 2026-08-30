@@ -279,10 +279,15 @@ export const RoleManagement = () => {
         onChange: setSelectedRowKeys,
       }}
       pagination={{
+        current: search.pageNo,
+        pageSize: search.pageSize,
+        showSizeChanger: true,
         total: roleListValue?.total ?? 0,
         showTotal: (total) => `共 ${total} 条`,
-        showSizeChanger: true,
-        pageSize: search.pageSize,
+        onChange: (newPageNo, newPageSize) => {
+          const val = searchForm.getFieldsValue();
+          setSearch({ ...search, ...val, pageNo: newPageNo, pageSize: newPageSize });
+        },
       }}
     />
   );
