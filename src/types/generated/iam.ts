@@ -150,6 +150,11 @@ export interface StatusParams {
   status: 1 | 2;
 }
 
+export interface UserInfoResult {
+  id: string;
+  nickname: string;
+}
+
 export interface UserListParams {
   email?: string;
   nickname?: string;

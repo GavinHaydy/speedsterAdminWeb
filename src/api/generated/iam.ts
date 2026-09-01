@@ -19,6 +19,7 @@ import type {
   RoleListResult,
   StatusParams,
   UpdateRoleParams,
+  UserInfoResult,
   UserListParams,
   UserListResult,
   UserPermissionResult,
@@ -102,7 +103,7 @@ export const status = (values: StatusParams, showError?: boolean) => {
 
 /** 用户信息 */
 export const userInfo = () => {
-  return request.get<unknown>('/api/user/userinfo');
+  return request.get<UserInfoResult>('/api/user/userinfo');
 };
 
 /** 用户列表 */

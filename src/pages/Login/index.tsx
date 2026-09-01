@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { DashboardOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Input, message } from 'antd';
 
-import { accountLogin, userPermission } from '@/api/generated/iam';
+import { accountLogin, userInfo, userPermission } from '@/api/generated/iam';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   login,
@@ -13,6 +13,7 @@ import {
   setLoading,
   setLoginError,
   setPermissions,
+  setUser,
 } from '@/store/slices/userSlice';
 import type { AccountLoginParams } from '@/types/generated/iam';
 import { initWasm } from '@/utils/wasm.ts';
@@ -47,6 +48,10 @@ export default function Login() {
       const permission = await userPermission();
 
       dispatch(setPermissions(permission));
+
+      const user = await userInfo();
+
+      dispatch(setUser(user));
 
       navigate('/dashboard', { replace: true });
     } catch (error) {

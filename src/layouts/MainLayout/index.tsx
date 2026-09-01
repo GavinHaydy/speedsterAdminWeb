@@ -126,6 +126,8 @@ const siderStyle: React.CSSProperties = {
 
 const heightStyle: React.CSSProperties = {
   height: '4vh',
+  display: 'flex',
+  alignItems: 'center',
 };
 
 export const GlobalLayout: React.FC = () => {
